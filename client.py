@@ -5,7 +5,6 @@
 import os
 
 import neat
-import visualize
 
 # dataset
 xor_inputs = [(0.0, 0.0), (0.0, 1.0), (1.0, 0.0), (1.0, 1.0)]
@@ -30,7 +29,7 @@ def run(config_file):
     # Create the population, which is the top-level object for a NEAT run.
     p = neat.Population(config)
 
-
+    print(p)
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(neat.StdOutReporter(True))
@@ -40,9 +39,12 @@ def run(config_file):
     #creates a checkpoint at the 10th generation!
     p.add_reporter(neat.Checkpointer(11)) 
 
-    # Run for up to 300 generations.
-    # winner = p.run(eval_genomes, 300)
+   
+    # this starts at generation 0
+    # run evolution algorithm run with the eval_genomes fitness function - for 10 generations
     winner = p.run(eval_genomes, 10)
+    # winner returns the best genome seen
+
 
 
     # Display the winning genome.
@@ -56,13 +58,9 @@ def run(config_file):
         print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
 
     node_names = {-1: 'A', -2: 'B', 0: 'A XOR B'}
-    # visualize.draw_net(config, winner, True, node_names=node_names)
-    # visualize.draw_net(config, winner, True, node_names=node_names, prune_unused=True)
-    # visualize.plot_stats(stats, ylog=False, view=True)
-    # visualize.plot_species(stats, view=True)
+  
 
-    p.run(eval_genomes, 10)
-
+    p.run(eval_genomes, 10) # run evolution algorithm run with the eval_genomes fitness function - for 10 generations
 
 if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
