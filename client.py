@@ -9,6 +9,8 @@ from argparse import Namespace
 from functools import reduce
 from copy import deepcopy
 
+#CRDT
+from py3crdt.gset import GSet
 # spectral bias
 def make_phased_waves(opt):
     t = np.arange(0, 1, 1./opt.N)
@@ -46,4 +48,17 @@ def to_torch_dataset_1d(opt, t, yt):
 # dissect https://github.com/ianwhale/nsga-net for bitstring encoding, model deduplication
 # look at https://github.com/nightstorm0909/NEvoNAS for how to structure actual search space / cells + implemenation of novelty search
 
-# honestly, CRDTs could help with encoding, deduplication, and novelty search. seemed like too much work before but it may not be
+# CRDTs could help with encoding, deduplication, and novelty search
+gset1 = GSet(id=1)
+gset2 = GSet(id=2)
+gset1.add('a')
+gset1.add('b')
+gset1.display()
+# ['a', 'b']   ----- Output
+gset2.add('b')
+gset2.add('c')
+gset2.display()
+# ['b', 'c']   ----- Output
+gset1.merge(gset2)   
+gset1.display()
+# ['a', 'b', 'c']   ----- Output
