@@ -24,7 +24,7 @@ FedNeuro doesn't require clients to send data to the server. FedNeuro builds a "
 ## To-do
 
 The dataset should 
-1. yield the model 
+1. generate the model that gets randomized at initialization
 2. narrow the search space
 
 CRDTs could help with 
