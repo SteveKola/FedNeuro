@@ -1,5 +1,8 @@
 
+import numpy as np
+
 #CRDT import
+from json import load
 from py3crdt.gset import GSet
 
 # global state 
@@ -9,19 +12,21 @@ def getid():
     number = gsetid + 1
     return number
 
-
-
-
-
 class individual:
     def __init__(self, genotype):
         num = getid()
         genotype = GSet(id=num)
         self.g = genotype
+     # genotype is individual specific, genome is not
 
 
-        # genotype is individual specific, genome is not
-  
+# in the single threaded version, the dataset is all of MNIST
+# load mnist data (preprocessed through unsupervised learning)
+def mnist():
+    data = np.load("data.npy")
+    return data
+
+
 
 def initialize():
     # apply random mutations to create 50 individuals for crossover
@@ -31,14 +36,19 @@ def initialize():
         ag = individual()
 
     # environment state = dataset
+    env = mnist()
 
-    # generate multi sensory spiking neural network (from genotype) using data and "linkage map"
+    # derive genotype from environment
 
-    # genes are portions of chromosomes - could be symmetrically generated from data 
+    # derive linkage map (close chromosomes go through crossover together)
 
-    # linkage map relates to distance between chromosomes that go thru crossover together
+    # generate multi sensory spiking neural network (from genotype) using linkage map
 
     # network connections probabilistically generated from linkage map
+
+
+
+
 
         
 
@@ -67,17 +77,5 @@ def performance():
 
 
 
-# in the single threaded version, the dataset is all of MNIST
 
 
-# CRDTs help with encoding, deduplication, and novelty search
-# gset1 = GSet(id=1)
-# gset2 = GSet(id=2)
-# gset1.add('a')
-# gset1.add('b')
-# gset1.display() # ['a', 'b']   ----- Output
-# gset2.add('b')
-# gset2.add('c')
-# gset2.display() # ['b', 'c']   ----- Output
-# gset1.merge(gset2)   
-# gset1.display() # ['a', 'b', 'c']   ----- Output
