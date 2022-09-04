@@ -1,4 +1,6 @@
-# the self supervised embeddings should be computed once because it takes a long time!
+# the unsupervised embeddings should be computed once because it takes a long time!
+
+# this is only for the single threaded test - the final version will be federated and use FEMNIST
 from sklearn.datasets import load_digits
 from sklearn.decomposition import TruncatedSVD
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
