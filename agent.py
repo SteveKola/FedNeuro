@@ -21,7 +21,7 @@ class individual:
 
 
 # in the single threaded version, the dataset is all of MNIST
-# load mnist data (preprocessed through unsupervised learning)
+# load mnist data (dimensionality reduction through unsupervised learning)
 def mnist():
     data = np.load("data.npy")
     return data
@@ -29,7 +29,7 @@ def mnist():
 
 
 def initialize():
-    # apply random mutations to create 50 individuals for crossover
+    
     global agents
     agents = []
     for i in 50:
