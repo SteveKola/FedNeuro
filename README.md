@@ -21,6 +21,3 @@
 
 FedNeuro doesn't require clients to send data to the server. FedNeuro builds a "common" model by learning from the progress each client made training populations on their own device.
 
-### Helpful papers
-
-Xingchen Wan, Binxin Ru, Pedro M. Esperança, Zhenguo Li. On Redundancy and Diversity in Cell-based Neural Architecture Search. In Proceedings of the 10th International Conference on Learning Representations (ICLR), 2022.
