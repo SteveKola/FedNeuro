@@ -21,15 +21,6 @@
 
 FedNeuro doesn't require clients to send data to the server. FedNeuro builds a "common" model by learning from the progress each client made training populations on their own device.
 
-## To-do
+### Helpful papers
 
-The dataset should 
-1. generate the model that gets randomized at initialization
-2. narrow the search space
-
-CRDTs could help with 
-1. encoding
-2. genome deduplication
-3. novelty search
-
-
+Xingchen Wan, Binxin Ru, Pedro M. Esperança, Zhenguo Li. On Redundancy and Diversity in Cell-based Neural Architecture Search. In Proceedings of the 10th International Conference on Learning Representations (ICLR), 2022.
