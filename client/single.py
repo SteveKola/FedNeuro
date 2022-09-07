@@ -1,6 +1,6 @@
 import numpy as np
 from search_spaces.nas301 import Genotype
-
+from search_spaces.LSUV import LSUVinit
 
 def load_data():
     from sklearn.datasets import load_digits
@@ -8,7 +8,8 @@ def load_data():
     #data is pandas DataFrame
     X, y = digits.data, digits.target 
     # target is pandas Series
-    n_samples, n_features = X.shape # 1797 samples, 64 features
+    #  n_samples, n_features = X.shape # 1797 samples, 64 features
+    return X
 
 
 PRIMITIVES = [
@@ -45,4 +46,7 @@ def end():
     genotype = _sample()
     return genotype
 
-end()
+# init weights
+model = LSUVinit(end(),load_data())
+
+# need to convert genotype to phenotype (model)
