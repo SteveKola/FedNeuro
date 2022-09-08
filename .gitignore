@@ -10,9 +10,11 @@
 [Ll]ocal
 [Ss]cripts
 pyvenv.cfg
-.venv
+.venv/*
 pip-selfcheck.json
 neat-checkpoint-*
 .DS_Store
 venv/*
 __pycache__/*
+socket_programming/*
+flwr_server/*
