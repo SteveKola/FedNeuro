@@ -1,11 +1,13 @@
 from os import environ
+from re import search
 from LSUV import LSUVinit
 
+import nni
 import torch
 import torch.nn.functional as F
 import nni.retiarii.nn.pytorch as nn
 from nni.retiarii import model_wrapper
-
+import nni.retiarii.strategy as strategy
 
 @model_wrapper 
 class ModelSpace(nn.Module):
@@ -48,43 +50,22 @@ class ModelSpace(nn.Module):
 
 model_space = ModelSpace()
 
-# I need to give the model MNIST data to init weights. This will make search take less time.
-# I also need to
-# print(model_space)
-# to see if everything works up to this point, but I hate working with Python locally. 
-# I think I need to move to some cloud environment because installing packages locally sucks.
+# we need to give the model MNIST data to initialize weights. This will make search take less time.
+
 model = LSUVinit(model_space,data)
 
+search_strategy = strategy.RegularizedEvolution(optimize_mode='maximize',population_size='300',cycles='100',on_failure='worst')
 
+import nni.retiarii.evaluator.pytorch.lightning as pl
+from torchvision import transforms
 
+transform = nni.trace(transforms.Compose, [nni.trace(transforms.ToTensor()), nni.trace(transforms.Normalize, (0.1307,), (0.3081,))])
+train_dataset = nni.trace(model, root='data/mnist', train=True, download=True, transform=transform)
+test_dataset = nni.trace(model, root='data/mnist', train=False, download=True, transform=transform)
 
-# dataset_train = MNIST(root="./data", train=True, download=True, transform=train_transform)
-# dataset_valid = MNIST(root="./data", train=False, download=True, transform=valid_transform)
-# criterion = nn.CrossEntropyLoss()
-# optimizer = torch.optim.SGD(model.parameters(), 0.05, momentum=0.9, weight_decay=1.0E-4)
+# pl.DataLoader and pl.Classification is already traced and supports serialization.
+evaluator = pl.Classification(train_dataloaders=pl.DataLoader(train_dataset, batch_size=100),
+                              val_dataloaders=pl.DataLoader(test_dataset, batch_size=100),
+                              max_epochs=10)
 
-
-# # use NAS here
-# def top1_accuracy(output, target):
-#     # this is the function that computes the reward, as required by ENAS algorithm
-#     batch_size = target.size(0)
-#     _, predicted = torch.max(output.data, 1)
-#     return (predicted == target).sum().item() / batch_size
-
-# def metrics_fn(output, target):
-#     # metrics function receives output and target and computes a dict of metrics
-#     return {"acc1": top1_accuracy(output, target)}
-
-# from nni.algorithms.nas.pytorch import enas
-# trainer = enas.EnasTrainer(model,
-#                            loss=criterion,
-#                            metrics=metrics_fn,
-#                            reward_function=top1_accuracy,
-#                            optimizer=optimizer,
-#                            batch_size=128
-#                            num_epochs=10,  # 10 epochs
-#                            dataset_train=dataset_train,
-#                            dataset_valid=dataset_valid,
-#                            log_frequency=10)  # print log every 10 steps
-# trainer.train()  # training
-# trainer.export(file="model_dir/final_architecture.json")  # export the final architecture to file
+# using https://nni.readthedocs.io/en/stable/nas/evaluator.html
